@@ -1,4 +1,5 @@
 #import "MGTransparentWindow.h"
+#import "TMAppDelegate.h"
 
 @implementation MGTransparentWindow
 
@@ -46,10 +47,11 @@
 	return NO;
 }
 
+/* Toggles the Finder icon visibility immediately) */
 
 - (void)keyDown:(NSEvent *)event
 {
-	[[self delegate] keyDown:event];
+    [(TMAppDelegate*)[self delegate] keyDown:event];
 }
 
 

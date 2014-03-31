@@ -12,10 +12,12 @@
 @implementation NSApplication (DockIcon)
 
 
-- (void)setShowsDockIcon:(BOOL)flag {
+- (void)setShowsDockIcon:(BOOL)flag
+{
 	// this should be called from the application delegate's applicationDidFinishLaunching
 	// method or from some controller object's awakeFromNib method
 	// Neat dockless hack using Carbon from <a href="http://codesorcery.net/2008/02/06/feature-requests-versus-the-right-way-to-do-it" title="http://codesorcery.net/2008/02/06/feature-requests-versus-the-right-way-to-do-it">http://codesorcery.net/2008/02/06/feature-requests-versus-the-right-way-...</a>
+    
 	if (flag) {
 		ProcessSerialNumber psn = { 0, kCurrentProcess };
 		// display dock icon

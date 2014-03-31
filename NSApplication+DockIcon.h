@@ -1,8 +1,8 @@
 //
 //  NSApplication+DockIcon.h
-//  Shady
+//  Debordelizer
 //
-//  Created by Matt Gemmell on 06/11/2009.
+//  Created by Matej Sychra on 06/11/2009.
 
 #import <Cocoa/Cocoa.h>
 

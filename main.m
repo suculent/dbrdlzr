@@ -1,8 +1,8 @@
 //
 //  main.m
-//  Shady
+//  Debordelizer
 //
-//  Created by Matt Gemmell on 02/11/2009.
+//  Created by Matej Sychra on 02/11/2009.
 //
 
 #import <Cocoa/Cocoa.h>

@@ -1,44 +1,49 @@
 //
-//  ShadyAppDelegate.m
-//  Shady
+//  TMAppDelegate.m
+//  Debordelizer
 //
-//  Created by Matt Gemmell on 02/11/2009.
+//  Created by Matej Sychra on 02/11/2009.
 //
 
-#import "ShadyAppDelegate.h"
+#import "TMAppDelegate.h"
 #import <QuartzCore/QuartzCore.h>
 #import "MGTransparentWindow.h"
 #import "NSApplication+DockIcon.h"
 
-#define OPACITY_UNIT				0.05; // "20 shades ought to be enough for _anybody_."
-#define DEFAULT_OPACITY				0.4
+#define OPACITY_UNIT				1.0;
+#define DEFAULT_OPACITY				0.0
 
-#define STATE_MENU					NSLocalizedString(@"Turn Shady Off", nil) // global status menu-item title when enabled
-#define STATE_MENU_OFF				NSLocalizedString(@"Turn Shady On", nil) // global status menu-item title when disabled
+#define STATE_MENU					NSLocalizedString(@"Turn Debordelizer Off", nil) // global status menu-item title when enabled
+#define STATE_MENU_OFF				NSLocalizedString(@"Turn Debordelizer On", nil) // global status menu-item title when disabled
 
-#define HELP_TEXT					NSLocalizedString(@"When Shady is frontmost:\rPress Up/Down to alter shade,\ror press Q to Quit.", nil)
-#define HELP_TEXT_OFF				NSLocalizedString(@"Shady is Off.\rPress S to turn Shady on,\ror press Q to Quit.", nil)
+#define EXTERNAL_MENU					NSLocalizedString(@"Turn External Display Off", nil) // global status menu-item title when enabled
+#define EXTERNAL_MENU_OFF				NSLocalizedString(@"Turn External Display On", nil) // global status menu-item title when disabled
+
+#define HELP_TEXT					NSLocalizedString(@"When Debordelizer is frontmost:\rPress Up/Down to alter shade,\ror press Q to Quit.", nil)
+#define HELP_TEXT_OFF				NSLocalizedString(@"Debordelizer is Off.\rPress S to turn Debordelizer on,\ror press Q to Quit.", nil)
 
 #define STATUS_MENU_ICON			[NSImage imageNamed:@"Shady_Menu_Dark"]
 #define STATUS_MENU_ICON_ALT		[NSImage imageNamed:@"Shady_Menu_Light"]
 #define STATUS_MENU_ICON_OFF		[NSImage imageNamed:@"Shady_Menu_Dark_Off"]
 #define STATUS_MENU_ICON_OFF_ALT	[NSImage imageNamed:@"Shady_Menu_Light_Off"]
 
-#define MAX_OPACITY					0.90 // the darkest the screen can be, where 1.0 is pure black.
-#define KEY_OPACITY					@"ShadySavedOpacityKey" // name of the saved opacity setting.
-#define KEY_DOCKICON				@"ShadySavedDockIconKey" // name of the saved dock icon state setting.
-#define KEY_ENABLED					@"ShadySavedEnabledKey" // name of the saved primary state setting.
+#define MAX_OPACITY					(0.95) // the darkest the screen can be, where 1.0 is pure black.
+#define KEY_OPACITY					@"DbrdlzrSavedOpacityKey" // name of the saved opacity setting.
+#define KEY_DOCKICON				@"DbrdlzrSavedDockIconKey" // name of the saved dock icon state setting.
+#define KEY_ENABLED					@"DbrdlzrSavedEnabledKey" // name of the saved primary state setting.
+#define KEY_EXTERNAL				@"DbrdlzrSavedExternalKey" // name of the saved secondary state setting.
 
-@implementation ShadyAppDelegate
+@implementation TMAppDelegate
 
 @synthesize window;
 @synthesize opacity;
 @synthesize statusMenu;
-@synthesize opacitySlider;
 @synthesize prefsWindow;
 @synthesize dockIconCheckbox;
 @synthesize stateMenuItemMainMenu;
 @synthesize stateMenuItemStatusBar;
+@synthesize externalMenuItemMainMenu;
+@synthesize externalMenuItemStatusBar;
 
 
 #pragma mark Setup and Tear-down
@@ -49,9 +54,9 @@
 	// Set the default opacity value and load any saved settings.
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	[defaults registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
-								[NSNumber numberWithFloat:DEFAULT_OPACITY], KEY_OPACITY, 
 								[NSNumber numberWithBool:YES], KEY_DOCKICON, 
-								[NSNumber numberWithBool:YES], KEY_ENABLED, 
+								[NSNumber numberWithBool:YES], KEY_ENABLED,
+                                [NSNumber numberWithBool:YES], KEY_EXTERNAL,
 								nil]];
 	
 	// Set up Dock icon.
@@ -93,13 +98,15 @@
     [statusItem setImage:STATUS_MENU_ICON];
 	[statusItem setAlternateImage:STATUS_MENU_ICON_ALT];
     [statusItem setHighlightMode:YES];
-	[opacitySlider setFloatValue:(1.0 - opacity)];
     [statusItem setMenu:statusMenu];
 	
 	// Set appropriate initial display state.
-	shadyEnabled = [defaults boolForKey:KEY_ENABLED];
+	shouldHideClutter = [defaults boolForKey:KEY_ENABLED];
 	[self updateEnabledStatus];
-	self.opacity = [defaults floatForKey:KEY_OPACITY];
+
+    // Set appropriate initial external display disable state.
+    externalEnabled = [defaults boolForKey:KEY_EXTERNAL];
+    [self updateExternalStatus];
 	
 	// Only show help text when activated _after_ we've launched and hidden ourselves.
 	showsHelpWhenActive = NO;
@@ -167,7 +174,7 @@
 
 - (IBAction)showAbout:(id)sender
 {
-	// We wrap this for the statusItem to ensure Shady comes to the front first.
+	// We wrap this for the statusItem to ensure Debordelizer comes to the front first.
 	[NSApp activateIgnoringOtherApps:YES];
 	[NSApp orderFrontStandardAboutPanel:self];
 }
@@ -177,34 +184,6 @@
 {
 	[NSApp activateIgnoringOtherApps:YES];
 	[prefsWindow makeKeyAndOrderFront:self];
-}
-
-
-- (IBAction)increaseOpacity:(id)sender
-{
-	// i.e. make screen darker by making our mask less transparent.
-	if (shadyEnabled) {
-		self.opacity = opacity + OPACITY_UNIT;
-	} else {
-		NSBeep();
-	}
-}
-
-
-- (IBAction)decreaseOpacity:(id)sender
-{
-	// i.e. make screen lighter by making our mask more transparent.
-	if (shadyEnabled) {
-		self.opacity = opacity - OPACITY_UNIT;
-	} else {
-		NSBeep();
-	}
-}
-
-
-- (IBAction)opacitySliderChanged:(id)sender
-{
-	self.opacity = (1.0 - [sender floatValue]);
 }
 
 
@@ -220,34 +199,14 @@
 
 - (IBAction)toggleEnabledStatus:(id)sender
 {
-	shadyEnabled = !shadyEnabled;
+	shouldHideClutter = !shouldHideClutter;
 	[self updateEnabledStatus];
 }
 
-
-- (void)keyDown:(NSEvent *)event
+- (IBAction)toggleExternalStatus:(id)sender
 {
-	if ([event window] == window) {
-		unsigned short keyCode = [event keyCode];
-		if (keyCode == 12 || keyCode == 53) { // q || Esc
-			[NSApp terminate:self];
-			
-		} else if (keyCode == 126) { // up-arrow
-			[self decreaseOpacity:self];
-			
-		} else if (keyCode == 125) { // down-arrow
-			[self increaseOpacity:self];
-			
-		} else if (keyCode == 1) { // s
-			[self toggleEnabledStatus:self];
-			
-		} else if (keyCode == 43) { // ,
-			[self showPreferences:self];
-			
-		} else {
-			//NSLog(@"keyCode: %d", keyCode);
-		}
-	}
+	externalEnabled = !externalEnabled;
+	[self updateExternalStatus];
 }
 
 
@@ -284,7 +243,7 @@
 		CGColorRef bgColor = CGColorCreateGenericGray(0.0, 0.6);
 		layer.backgroundColor = bgColor;
 		CGColorRelease(bgColor);
-		layer.string = (shadyEnabled) ? HELP_TEXT : HELP_TEXT_OFF;
+		layer.string = (shouldHideClutter) ? HELP_TEXT : HELP_TEXT_OFF;
 		layer.contentsRect = CGRectMake(0, 0, 1, 1.2);
 		layer.fontSize = 40.0;
 		layer.foregroundColor = CGColorGetConstantColor(kCGColorWhite);
@@ -295,42 +254,140 @@
 		
 		[window addChildWindow:helpWindow ordered:NSWindowAbove];
 	}
-	
+
 	if (showsHelpWhenActive) {
-		float helpOpacity = (([NSApp isActive] ? 1 : 0));
-		[[[helpWindow contentView] layer] setOpacity:helpOpacity];
+		//float helpOpacity = (([NSApp isActive] ? 1 : 0));
+		//[[[helpWindow contentView] layer] setOpacity:helpOpacity];
 	}
 }
-
 
 - (void)updateEnabledStatus
 {
 	// Save state.
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	[defaults setBool:shadyEnabled forKey:KEY_ENABLED];
+	[defaults setBool:shouldHideClutter forKey:KEY_ENABLED];
 	[defaults synchronize];
 	
 	// Show or hide the shade layer's view appropriately.
-	[[[window contentView] animator] setHidden:!shadyEnabled];
+	[[[window contentView] animator] setHidden:!shouldHideClutter];
 	
 	// Modify help text shown when we're frontmost.
 	if (helpWindow) {
 		CATextLayer *helpLayer = (CATextLayer *)[[helpWindow contentView] layer];
-		helpLayer.string = (shadyEnabled) ? HELP_TEXT : HELP_TEXT_OFF;
+		helpLayer.string = (shouldHideClutter) ? HELP_TEXT : HELP_TEXT_OFF;
 	}
 	
 	// Update both enable/disable menu-items (in the main menubar and in the NSStatusItem's menu).
-	[stateMenuItemMainMenu setTitle:(shadyEnabled) ? STATE_MENU : STATE_MENU_OFF];
-	[stateMenuItemStatusBar setTitle:(shadyEnabled) ? STATE_MENU : STATE_MENU_OFF];
+	[stateMenuItemMainMenu setTitle:(shouldHideClutter) ? STATE_MENU : STATE_MENU_OFF];
+	[stateMenuItemStatusBar setTitle:(shouldHideClutter) ? STATE_MENU : STATE_MENU_OFF];
 	
 	// Update status item's regular and alt/selected images.
-	[statusItem setImage:(shadyEnabled) ? STATUS_MENU_ICON : STATUS_MENU_ICON_OFF];
-	[statusItem setAlternateImage:(shadyEnabled) ? STATUS_MENU_ICON_ALT : STATUS_MENU_ICON_OFF_ALT];
-	
-	// Enable/disable slider.
-	[opacitySlider setEnabled:shadyEnabled];
+	[statusItem setImage:(shouldHideClutter) ? STATUS_MENU_ICON : STATUS_MENU_ICON_OFF];
+	[statusItem setAlternateImage:(shouldHideClutter) ? STATUS_MENU_ICON_ALT : STATUS_MENU_ICON_OFF_ALT];
+
+    [self toggleStatus];
 }
 
+- (void)keyDown:(NSEvent *)event
+{
+	if ([event window] == window) {
+		unsigned short keyCode = [event keyCode];
+		if (keyCode == 12 || keyCode == 53) { // q || Esc
+			[NSApp terminate:self];
+
+		} else if (keyCode == 126) { // up-arrow
+			[self hidePresentation:self];
+
+		} else if (keyCode == 125) { // down-arrow
+			[self showPresentation:self];
+
+		} else if (keyCode == 1) { // s
+			[self toggleEnabledStatus:self];
+
+		} else if (keyCode == 43) { // ,
+			[self showPreferences:self];
+
+		} else {
+			//NSLog(@"keyCode: %d", keyCode);
+		}
+	}
+}
+
+- (IBAction)hidePresentation:(id)sender
+{
+	// i.e. make screen darker by making our mask less transparent.
+	if (externalEnabled) {
+		self.opacity = opacity + OPACITY_UNIT;
+	} else {
+		NSBeep();
+	}
+}
+
+
+- (IBAction)showPresentation:(id)sender
+{
+	// i.e. make screen lighter by making our mask more transparent.
+	if (!externalEnabled) {
+		self.opacity = opacity - OPACITY_UNIT;
+	} else {
+		NSBeep();
+	}
+}
+
+-(void)toggleStatus
+{
+    //
+    // defaults write com.apple.finder CreateDesktop -bool true; killall Finder
+    // defaults write com.apple.finder CreateDesktop -bool false; killall Finder
+    //
+
+    if (shouldHideClutter) {
+
+        // hide desktop icons
+        [NSTask launchedTaskWithLaunchPath:@"/usr/bin/defaults" arguments:
+         [NSArray arrayWithObjects:@"write", @"com.apple.finder", @"CreateDesktop", @"-bool", @"false", nil]
+         ];
+
+        // restart finder
+        [NSTask launchedTaskWithLaunchPath:@"/usr/bin/killall" arguments:
+         [NSArray arrayWithObjects:@"Finder", nil]
+         ];
+
+    } else {
+
+        // unhide desktop icons
+        [NSTask launchedTaskWithLaunchPath:@"/usr/bin/defaults" arguments:
+         [NSArray arrayWithObjects:@"write", @"com.apple.finder", @"CreateDesktop", @"-bool", @"true", nil]
+         ];
+
+        // restart finder
+        [NSTask launchedTaskWithLaunchPath:@"/usr/bin/killall" arguments:
+         [NSArray arrayWithObjects:@"Finder", nil]
+         ];
+    }
+}
+
+-(void)updateExternalStatus
+{
+    // Save state.
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	[defaults setBool:externalEnabled forKey:KEY_EXTERNAL];
+	[defaults synchronize];
+
+    // Update both enable/disable menu-items (in the main menubar and in the NSStatusItem's menu).
+	[self.externalMenuItemMainMenu setTitle:(externalEnabled) ? EXTERNAL_MENU : EXTERNAL_MENU_OFF];
+	[self.externalMenuItemStatusBar setTitle:(externalEnabled) ? EXTERNAL_MENU : EXTERNAL_MENU_OFF];
+    
+
+    // Show or hide the shade layer's view appropriately.
+	[[[window contentView] animator] setHidden:!externalEnabled];
+
+    if (!externalEnabled) {
+        [self showPresentation:self];
+    } else {
+        [self hidePresentation:self];
+    }
+}
 
 #pragma mark Accessors
 
@@ -341,14 +398,11 @@
 	if (normalisedOpacity != opacity) {
 		opacity = normalisedOpacity;
 		[[[window contentView] layer] setOpacity:opacity];
-		
+
 		NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 		[defaults setFloat:opacity forKey:KEY_OPACITY];
 		[defaults synchronize];
-		
-		[opacitySlider setFloatValue:(1.0 - opacity)];
 	}
 }
-
 
 @end

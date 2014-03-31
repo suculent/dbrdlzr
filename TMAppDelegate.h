@@ -1,47 +1,51 @@
 //
-//  ShadyAppDelegate.h
-//  Shady
+//  TMAppDelegate.h
+//  Debordelizer
 //
-//  Created by Matt Gemmell on 02/11/2009.
+//  Created by Matej Sychra on 02/11/2009.
 //
 
 #import <Cocoa/Cocoa.h>
 
-@interface ShadyAppDelegate : NSObject {
+@interface TMAppDelegate : NSObject <NSWindowDelegate>
+{
     NSWindow *window;
-	float opacity;
 	BOOL showsHelpWhenActive;
 	NSWindow *helpWindow;
 	NSMenu *statusMenu;
-	NSSlider *opacitySlider;
 	NSStatusItem *statusItem;
 	NSPanel *prefsWindow;
 	NSButton *dockIconCheckbox;
 	NSMenuItem *stateMenuItemMainMenu;
+    NSMenuItem *externalMenuItemMainMenu;
 	NSMenuItem *stateMenuItemStatusBar;
-	BOOL shadyEnabled;
+    NSMenuItem *externalMenuItemStatusBar;
+	BOOL shouldHideClutter;
+    BOOL externalEnabled;
+    float opacity;
 }
 
 @property (assign) IBOutlet NSWindow *window;
-@property (assign) float opacity;
+@property (nonatomic, assign) float opacity;
 @property (assign) IBOutlet NSMenu *statusMenu;
-@property (assign) IBOutlet NSSlider *opacitySlider;
 @property (assign) IBOutlet NSPanel *prefsWindow;
 @property (assign) IBOutlet NSButton *dockIconCheckbox;
 @property (assign) IBOutlet NSMenuItem *stateMenuItemMainMenu;
+@property (assign) IBOutlet NSMenuItem *externalMenuItemMainMenu;
 @property (assign) IBOutlet NSMenuItem *stateMenuItemStatusBar;
+@property (assign) IBOutlet NSMenuItem *externalMenuItemStatusBar;
 
 - (IBAction)showAbout:(id)sender;
 - (IBAction)showPreferences:(id)sender;
 - (IBAction)toggleDockIcon:(id)sender;
 - (IBAction)toggleEnabledStatus:(id)sender;
-
-- (IBAction)increaseOpacity:(id)sender;
-- (IBAction)decreaseOpacity:(id)sender;
-- (IBAction)opacitySliderChanged:(id)sender;
+- (IBAction)toggleExternalStatus:(id)sender;
 
 - (void)applicationActiveStateChanged:(NSNotification *)aNotification;
 - (void)toggleHelpDisplay;
 - (void)updateEnabledStatus;
+- (void)updateExternalStatus;
+
+- (void)keyDown:(NSEvent *)event;
 
 @end

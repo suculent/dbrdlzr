@@ -215,6 +215,15 @@
     [self terminateApp];
 }
 
+-(BOOL)validateMenuItem:(NSMenuItem *)menuItem
+{
+    // Enable/disable 'External Displays' menu item based on screens count
+    if ((menuItem == externalMenuItemMainMenu) || (menuItem == externalMenuItemStatusBar)) {
+        return ([[NSScreen screens] count] > 1) ? YES : NO;
+    }
+
+    return YES;
+}
 
 -(void)terminateApp
 {

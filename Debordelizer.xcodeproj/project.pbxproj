@@ -13,6 +13,7 @@
 		883F5B7F18E98AA9008A6064 /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 883F5B7E18E98AA9008A6064 /* Carbon.framework */; };
 		883F5B8118E9A1B6008A6064 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 883F5B8018E9A1B6008A6064 /* Images.xcassets */; };
 		883F5B8318EA16E3008A6064 /* CHANGELOG in Resources */ = {isa = PBXBuildFile; fileRef = 883F5B8218EA16E3008A6064 /* CHANGELOG */; };
+		88D0AC5018EAADC70051BDAA /* dsa_pub.pem in Resources */ = {isa = PBXBuildFile; fileRef = 88D0AC4F18EAADC70051BDAA /* dsa_pub.pem */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
@@ -57,6 +58,7 @@
 		883F5B7E18E98AA9008A6064 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = Platforms/MacOSX.platform/Developer/SDKs/MacOSX10.9.sdk/System/Library/Frameworks/Carbon.framework; sourceTree = DEVELOPER_DIR; };
 		883F5B8018E9A1B6008A6064 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Debordelizer/Images.xcassets; sourceTree = "<group>"; };
 		883F5B8218EA16E3008A6064 /* CHANGELOG */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = CHANGELOG; sourceTree = "<group>"; };
+		88D0AC4F18EAADC70051BDAA /* dsa_pub.pem */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = dsa_pub.pem; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Debordelizer-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Debordelizer-Info.plist"; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* Debordelizer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Debordelizer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9119048109F74D900EE7B84 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -162,6 +164,7 @@
 				1DDD58140DA1D0A300B32029 /* MainMenu.xib */,
 				8D1107310486CEB800E47090 /* Debordelizer-Info.plist */,
 				C9A3A24C109F67E500E483C0 /* Credits.html */,
+				88D0AC4F18EAADC70051BDAA /* dsa_pub.pem */,
 				C9F3743C10A614C700025D8B /* Images */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
 			);
@@ -204,6 +207,7 @@
 				8D11072C0486CEB800E47090 /* Sources */,
 				8D11072E0486CEB800E47090 /* Frameworks */,
 				C9906FA110A4D205003C9798 /* CopyFiles */,
+				88D0AC5218EAB7820051BDAA /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -250,6 +254,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
+				88D0AC5018EAADC70051BDAA /* dsa_pub.pem in Resources */,
 				883F5B8118E9A1B6008A6064 /* Images.xcassets in Resources */,
 				1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */,
 				C9A3A24E109F67E500E483C0 /* Credits.html in Resources */,
@@ -264,6 +269,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		88D0AC5218EAB7820051BDAA /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/bash;
+			shellScript = "";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		8D11072C0486CEB800E47090 /* Sources */ = {
@@ -314,6 +335,7 @@
 				CODE_SIGN_IDENTITY = "";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)\"",
@@ -328,6 +350,7 @@
 				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = Debordelizer;
 				SDKROOT = macosx;
+				SYMROOT = "${PROJECT_DIR}/build";
 			};
 			name = Debug;
 		};
@@ -349,6 +372,7 @@
 				INSTALL_PATH = "$(HOME)/Applications";
 				PRODUCT_NAME = Debordelizer;
 				SDKROOT = macosx;
+				SYMROOT = "${PROJECT_DIR}/build";
 			};
 			name = Release;
 		};

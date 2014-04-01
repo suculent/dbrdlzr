@@ -18,6 +18,7 @@
 
 #define EXTERNAL_MENU					NSLocalizedString(@"Turn External Display Off", nil) // global status menu-item title when enabled
 #define EXTERNAL_MENU_OFF				NSLocalizedString(@"Turn External Display On", nil) // global status menu-item title when disabled
+#define EXTERNAL_MENU_NONE				NSLocalizedString(@"No External Display", nil) // global status menu-item title when no display connected
 
 #define HELP_TEXT					NSLocalizedString(@"When Debordelizer is frontmost:\rPress Up/Down to alter shade,\ror press Q to Quit.", nil)
 #define HELP_TEXT_OFF				NSLocalizedString(@"Debordelizer is Off.\rPress S to turn Debordelizer on,\ror press Q to Quit.", nil)
@@ -67,10 +68,16 @@
 		[NSApp setShowsDockIcon:showsDockIcon];
 	}
 	
-	// Create transparent window.
-	NSRect screensFrame = [[NSScreen mainScreen] frame];
+	// Create transparent window starting in bottom right screen corner.
+
+    NSRect mainFrame = [[NSScreen mainScreen] frame];
+	NSRect screensFrame = NSMakeRect(mainFrame.size.width, mainFrame.size.height, 1, 1);
+
+    // Dim all but the main screen (hopefully it's not in the middle - a bug comes here!)
 	for (NSScreen *thisScreen in [NSScreen screens]) {
-		screensFrame = NSUnionRect(screensFrame, [thisScreen frame]);
+        if (thisScreen != [NSScreen mainScreen]) {
+            screensFrame = NSUnionRect(screensFrame, [thisScreen frame]);
+        }
 	}
 	window = [[MGTransparentWindow windowWithFrame:screensFrame] retain];
 	
@@ -374,10 +381,14 @@
 	[defaults setBool:externalEnabled forKey:KEY_EXTERNAL];
 	[defaults synchronize];
 
-    // Update both enable/disable menu-items (in the main menubar and in the NSStatusItem's menu).
-	[self.externalMenuItemMainMenu setTitle:(externalEnabled) ? EXTERNAL_MENU : EXTERNAL_MENU_OFF];
-	[self.externalMenuItemStatusBar setTitle:(externalEnabled) ? EXTERNAL_MENU : EXTERNAL_MENU_OFF];
-    
+    if ([[NSScreen screens] count] > 1) {
+        // Update both enable/disable menu-items (in the main menubar and in the NSStatusItem's menu).
+        [self.externalMenuItemMainMenu setTitle:(externalEnabled) ? EXTERNAL_MENU : EXTERNAL_MENU_OFF];
+        [self.externalMenuItemStatusBar setTitle:(externalEnabled) ? EXTERNAL_MENU : EXTERNAL_MENU_OFF];
+    } else {
+        [self.externalMenuItemMainMenu setTitle:EXTERNAL_MENU_NONE];
+        [self.externalMenuItemStatusBar setTitle:EXTERNAL_MENU_NONE];
+    }
 
     // Show or hide the shade layer's view appropriately.
 	[[[window contentView] animator] setHidden:!externalEnabled];

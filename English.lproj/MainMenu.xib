@@ -85,8 +85,8 @@
                         </items>
                     </menu>
                 </menuItem>
-                <menuItem title="Shade" id="295">
-                    <menu key="submenu" title="Shade" id="296">
+                <menuItem title="Bordel" id="295">
+                    <menu key="submenu" title="Bordel" id="296">
                         <items>
                             <menuItem title="Turn Debordelizer Off" keyEquivalent="s" id="599">
                                 <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>

@@ -1,5 +1,12 @@
+1.2
+- fixed bug where only one screen is available
+- added auto updates
+
+- [future feature]: Disable Notifications center ("launchctl unload -w /System/Library/LaunchAgents/com.apple.notificationcenterui.plist
+killall NotificationCenter")
+
 1.1
-- ‘Turn External Display Off’ actually shades current display only…
+- ‘Turn External Display Off’ actually shades all but current display (if not only one or if it's in the middle!)
 - updated icon
 - slight refactoring
 - changelog created

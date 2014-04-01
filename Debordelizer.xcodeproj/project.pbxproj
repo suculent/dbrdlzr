@@ -18,16 +18,15 @@
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		C940E3F610A05A36001EE8BF /* Debordelizer.icns in Resources */ = {isa = PBXBuildFile; fileRef = C940E3F510A05A36001EE8BF /* Debordelizer.icns */; };
-		C940E40A10A05CB6001EE8BF /* Debordelizer_Subdued.icns in Resources */ = {isa = PBXBuildFile; fileRef = C940E40910A05CB6001EE8BF /* Debordelizer_Subdued.icns */; };
 		C9711F00109F4572003125E7 /* MGTransparentWindow.m in Sources */ = {isa = PBXBuildFile; fileRef = C9711EFF109F4572003125E7 /* MGTransparentWindow.m */; };
 		C9906E8910A4C2B7003C9798 /* NSApplication+DockIcon.m in Sources */ = {isa = PBXBuildFile; fileRef = C9906E8810A4C2B7003C9798 /* NSApplication+DockIcon.m */; };
 		C9906F9210A4D1C6003C9798 /* Sparkle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C9906F9110A4D1C6003C9798 /* Sparkle.framework */; };
 		C9906F9810A4D1EE003C9798 /* Sparkle.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = C9906F9110A4D1C6003C9798 /* Sparkle.framework */; };
 		C9A3A24E109F67E500E483C0 /* Credits.html in Resources */ = {isa = PBXBuildFile; fileRef = C9A3A24C109F67E500E483C0 /* Credits.html */; };
-		C9B629FC10A200C200A67B48 /* Shady_Menu_Dark.png in Resources */ = {isa = PBXBuildFile; fileRef = C9B629FA10A200C200A67B48 /* Shady_Menu_Dark.png */; };
-		C9B629FD10A200C200A67B48 /* Shady_Menu_Light.png in Resources */ = {isa = PBXBuildFile; fileRef = C9B629FB10A200C200A67B48 /* Shady_Menu_Light.png */; };
-		C9F3742A10A60E5800025D8B /* Shady_Menu_Dark_Off.png in Resources */ = {isa = PBXBuildFile; fileRef = C9F3742810A60E5800025D8B /* Shady_Menu_Dark_Off.png */; };
-		C9F3742B10A60E5800025D8B /* Shady_Menu_Light_Off.png in Resources */ = {isa = PBXBuildFile; fileRef = C9F3742910A60E5800025D8B /* Shady_Menu_Light_Off.png */; };
+		C9B629FC10A200C200A67B48 /* Shady_Menu_Dark_Off.png in Resources */ = {isa = PBXBuildFile; fileRef = C9B629FA10A200C200A67B48 /* Shady_Menu_Dark_Off.png */; };
+		C9B629FD10A200C200A67B48 /* Shady_Menu_Light_Off.png in Resources */ = {isa = PBXBuildFile; fileRef = C9B629FB10A200C200A67B48 /* Shady_Menu_Light_Off.png */; };
+		C9F3742A10A60E5800025D8B /* Shady_Menu_Dark.png in Resources */ = {isa = PBXBuildFile; fileRef = C9F3742810A60E5800025D8B /* Shady_Menu_Dark.png */; };
+		C9F3742B10A60E5800025D8B /* Shady_Menu_Light.png in Resources */ = {isa = PBXBuildFile; fileRef = C9F3742910A60E5800025D8B /* Shady_Menu_Light.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -63,7 +62,6 @@
 		8D1107320486CEB800E47090 /* Debordelizer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Debordelizer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C9119048109F74D900EE7B84 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		C940E3F510A05A36001EE8BF /* Debordelizer.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Debordelizer.icns; sourceTree = "<group>"; };
-		C940E40910A05CB6001EE8BF /* Debordelizer_Subdued.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = Debordelizer_Subdued.icns; sourceTree = "<group>"; };
 		C9711EFE109F4572003125E7 /* MGTransparentWindow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MGTransparentWindow.h; sourceTree = "<group>"; };
 		C9711EFF109F4572003125E7 /* MGTransparentWindow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MGTransparentWindow.m; sourceTree = "<group>"; };
 		C9906E8710A4C2B7003C9798 /* NSApplication+DockIcon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSApplication+DockIcon.h"; sourceTree = "<group>"; };
@@ -71,11 +69,11 @@
 		C9906EC910A4C51C003C9798 /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = System/Library/Frameworks/Carbon.framework; sourceTree = SDKROOT; };
 		C9906F9110A4D1C6003C9798 /* Sparkle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Sparkle.framework; sourceTree = "<group>"; };
 		C9A3A24D109F67E500E483C0 /* English */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; name = English; path = English.lproj/Credits.html; sourceTree = "<group>"; };
-		C9B629FA10A200C200A67B48 /* Shady_Menu_Dark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Shady_Menu_Dark.png; sourceTree = "<group>"; };
-		C9B629FB10A200C200A67B48 /* Shady_Menu_Light.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Shady_Menu_Light.png; sourceTree = "<group>"; };
+		C9B629FA10A200C200A67B48 /* Shady_Menu_Dark_Off.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Shady_Menu_Dark_Off.png; sourceTree = "<group>"; };
+		C9B629FB10A200C200A67B48 /* Shady_Menu_Light_Off.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Shady_Menu_Light_Off.png; sourceTree = "<group>"; };
 		C9B62A0F10A2021100A67B48 /* Shady_Menu_Icons.psd */ = {isa = PBXFileReference; lastKnownFileType = file; path = Shady_Menu_Icons.psd; sourceTree = "<group>"; };
-		C9F3742810A60E5800025D8B /* Shady_Menu_Dark_Off.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Shady_Menu_Dark_Off.png; sourceTree = "<group>"; };
-		C9F3742910A60E5800025D8B /* Shady_Menu_Light_Off.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Shady_Menu_Light_Off.png; sourceTree = "<group>"; };
+		C9F3742810A60E5800025D8B /* Shady_Menu_Dark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Shady_Menu_Dark.png; sourceTree = "<group>"; };
+		C9F3742910A60E5800025D8B /* Shady_Menu_Light.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Shady_Menu_Light.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -186,11 +184,10 @@
 			isa = PBXGroup;
 			children = (
 				C940E3F510A05A36001EE8BF /* Debordelizer.icns */,
-				C940E40910A05CB6001EE8BF /* Debordelizer_Subdued.icns */,
-				C9B629FA10A200C200A67B48 /* Shady_Menu_Dark.png */,
-				C9B629FB10A200C200A67B48 /* Shady_Menu_Light.png */,
-				C9F3742810A60E5800025D8B /* Shady_Menu_Dark_Off.png */,
-				C9F3742910A60E5800025D8B /* Shady_Menu_Light_Off.png */,
+				C9B629FA10A200C200A67B48 /* Shady_Menu_Dark_Off.png */,
+				C9B629FB10A200C200A67B48 /* Shady_Menu_Light_Off.png */,
+				C9F3742810A60E5800025D8B /* Shady_Menu_Dark.png */,
+				C9F3742910A60E5800025D8B /* Shady_Menu_Light.png */,
 				C9B62A0F10A2021100A67B48 /* Shady_Menu_Icons.psd */,
 			);
 			name = Images;
@@ -260,11 +257,10 @@
 				C9A3A24E109F67E500E483C0 /* Credits.html in Resources */,
 				C940E3F610A05A36001EE8BF /* Debordelizer.icns in Resources */,
 				883F5B8318EA16E3008A6064 /* CHANGELOG in Resources */,
-				C940E40A10A05CB6001EE8BF /* Debordelizer_Subdued.icns in Resources */,
-				C9B629FC10A200C200A67B48 /* Shady_Menu_Dark.png in Resources */,
-				C9B629FD10A200C200A67B48 /* Shady_Menu_Light.png in Resources */,
-				C9F3742A10A60E5800025D8B /* Shady_Menu_Dark_Off.png in Resources */,
-				C9F3742B10A60E5800025D8B /* Shady_Menu_Light_Off.png in Resources */,
+				C9B629FC10A200C200A67B48 /* Shady_Menu_Dark_Off.png in Resources */,
+				C9B629FD10A200C200A67B48 /* Shady_Menu_Light_Off.png in Resources */,
+				C9F3742A10A60E5800025D8B /* Shady_Menu_Dark.png in Resources */,
+				C9F3742B10A60E5800025D8B /* Shady_Menu_Light.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

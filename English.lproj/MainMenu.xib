@@ -67,7 +67,7 @@
                             </menuItem>
                             <menuItem title="Quit Debordelizer" keyEquivalent="q" id="136">
                                 <connections>
-                                    <action selector="terminate:" target="-3" id="449"/>
+                                    <action selector="quitApp:" target="494" id="mUZ-l2-GX4"/>
                                 </connections>
                             </menuItem>
                         </items>
@@ -88,14 +88,14 @@
                 <menuItem title="Bordel" id="295">
                     <menu key="submenu" title="Bordel" id="296">
                         <items>
-                            <menuItem title="Turn Debordelizer Off" keyEquivalent="s" id="599">
+                            <menuItem title="Hide Desktop Icons" keyEquivalent="s" id="599">
                                 <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                 <connections>
                                     <action selector="toggleEnabledStatus:" target="494" id="605"/>
                                 </connections>
                             </menuItem>
                             <menuItem isSeparatorItem="YES" id="vcO-2I-Pe3"/>
-                            <menuItem title="Turn External Screen Off" keyEquivalent="e" id="b9S-nA-ucf">
+                            <menuItem title="Hide External Screen" keyEquivalent="e" id="b9S-nA-ucf">
                                 <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
                                 <connections>
                                     <action selector="toggleExternalStatus:" target="-1" id="8d0-SX-oBY"/>
@@ -162,7 +162,7 @@
                 <menuItem title="Quit Debordelizer" id="543">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>
-                        <action selector="terminate:" target="-3" id="545"/>
+                        <action selector="quitApp:" target="494" id="hbn-GI-8Ij"/>
                     </connections>
                 </menuItem>
             </items>
@@ -190,7 +190,7 @@
                     <textField verticalHuggingPriority="750" id="566">
                         <rect key="frame" x="38" y="20" width="280" height="14"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMinY="YES"/>
-                        <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Changing this setting may require restarting Debordelizer." id="567">
+                        <textFieldCell key="cell" controlSize="small" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" title="Changing requires restarting Debordelizer." id="567">
                             <font key="font" metaFont="smallSystem"/>
                             <color key="textColor" name="controlTextColor" catalog="System" colorSpace="catalog"/>
                             <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>

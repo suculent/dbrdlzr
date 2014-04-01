@@ -13,15 +13,15 @@
 #define OPACITY_UNIT				1.0;
 #define DEFAULT_OPACITY				0.0
 
-#define STATE_MENU					NSLocalizedString(@"Turn Debordelizer Off", nil) // global status menu-item title when enabled
-#define STATE_MENU_OFF				NSLocalizedString(@"Turn Debordelizer On", nil) // global status menu-item title when disabled
+#define STATE_MENU					NSLocalizedString(@"Show Desktop Icons", nil) // global status menu-item title when enabled
+#define STATE_MENU_OFF				NSLocalizedString(@"Hide Desktop Icons", nil) // global status menu-item title when disabled
 
-#define EXTERNAL_MENU					NSLocalizedString(@"Turn External Display Off", nil) // global status menu-item title when enabled
-#define EXTERNAL_MENU_OFF				NSLocalizedString(@"Turn External Display On", nil) // global status menu-item title when disabled
+#define EXTERNAL_MENU					NSLocalizedString(@"Hide External Display", nil) // global status menu-item title when enabled
+#define EXTERNAL_MENU_OFF				NSLocalizedString(@"Show External Display", nil) // global status menu-item title when disabled
 #define EXTERNAL_MENU_NONE				NSLocalizedString(@"No External Display", nil) // global status menu-item title when no display connected
 
-#define HELP_TEXT					NSLocalizedString(@"When Debordelizer is frontmost:\rPress Up/Down to alter shade,\ror press Q to Quit.", nil)
-#define HELP_TEXT_OFF				NSLocalizedString(@"Debordelizer is Off.\rPress S to turn Debordelizer on,\ror press Q to Quit.", nil)
+#define HELP_TEXT					NSLocalizedString(@"When Debordelizer is frontmost:\rPress Q to Quit.", nil)
+#define HELP_TEXT_OFF				NSLocalizedString(@"Debordelizer is Off.\rPress S to turn Debordelizer on,\ror press Q to Quit.\n", nil)
 
 #define STATUS_MENU_ICON			[NSImage imageNamed:@"Shady_Menu_Dark"]
 #define STATUS_MENU_ICON_ALT		[NSImage imageNamed:@"Shady_Menu_Light"]
@@ -56,8 +56,8 @@
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	[defaults registerDefaults:[NSDictionary dictionaryWithObjectsAndKeys:
 								[NSNumber numberWithBool:YES], KEY_DOCKICON, 
-								[NSNumber numberWithBool:YES], KEY_ENABLED,
-                                [NSNumber numberWithBool:YES], KEY_EXTERNAL,
+								[NSNumber numberWithBool:NO], KEY_ENABLED,
+                                [NSNumber numberWithBool:NO], KEY_EXTERNAL,
 								nil]];
 	
 	// Set up Dock icon.
@@ -112,7 +112,7 @@
 	[self updateEnabledStatus];
 
     // Set appropriate initial external display disable state.
-    externalEnabled = [defaults boolForKey:KEY_EXTERNAL];
+    externalDisplaysHidden = [defaults boolForKey:KEY_EXTERNAL];
     [self updateExternalStatus];
 	
 	// Only show help text when activated _after_ we've launched and hidden ourselves.
@@ -210,10 +210,38 @@
 	[self updateEnabledStatus];
 }
 
+-(IBAction)quitApp:(id)sender
+{
+    [self terminateApp];
+}
+
+
+-(void)terminateApp
+{
+    [self showClutter];
+    [self showExternal];
+
+    [NSApp performSelector:@selector(terminate:) withObject:self afterDelay:2.0f];
+}
+
+-(void)showClutter
+{
+    shouldHideClutter = NO;
+    [self updateEnabledStatus];
+}
+
 - (IBAction)toggleExternalStatus:(id)sender
 {
-	externalEnabled = !externalEnabled;
+	externalDisplaysHidden = !externalDisplaysHidden;
+
 	[self updateExternalStatus];
+}
+
+-(void)showExternal
+{
+    externalDisplaysHidden = YES;
+
+    [self updateExternalStatus];
 }
 
 
@@ -263,8 +291,8 @@
 	}
 
 	if (showsHelpWhenActive) {
-		//float helpOpacity = (([NSApp isActive] ? 1 : 0));
-		//[[[helpWindow contentView] layer] setOpacity:helpOpacity];
+		float helpOpacity = (([NSApp isActive] ? 1 : 0));
+		[[[helpWindow contentView] layer] setOpacity:helpOpacity];
 	}
 }
 
@@ -300,7 +328,7 @@
 	if ([event window] == window) {
 		unsigned short keyCode = [event keyCode];
 		if (keyCode == 12 || keyCode == 53) { // q || Esc
-			[NSApp terminate:self];
+			[self terminateApp];
 
 		} else if (keyCode == 126) { // up-arrow
 			[self hidePresentation:self];
@@ -323,7 +351,7 @@
 - (IBAction)hidePresentation:(id)sender
 {
 	// i.e. make screen darker by making our mask less transparent.
-	if (externalEnabled) {
+	if (externalDisplaysHidden) {
 		self.opacity = opacity + OPACITY_UNIT;
 	} else {
 		NSBeep();
@@ -334,7 +362,7 @@
 - (IBAction)showPresentation:(id)sender
 {
 	// i.e. make screen lighter by making our mask more transparent.
-	if (!externalEnabled) {
+	if (!externalDisplaysHidden) {
 		self.opacity = opacity - OPACITY_UNIT;
 	} else {
 		NSBeep();
@@ -378,22 +406,26 @@
 {
     // Save state.
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	[defaults setBool:externalEnabled forKey:KEY_EXTERNAL];
+	[defaults setBool:externalDisplaysHidden forKey:KEY_EXTERNAL];
 	[defaults synchronize];
 
     if ([[NSScreen screens] count] > 1) {
         // Update both enable/disable menu-items (in the main menubar and in the NSStatusItem's menu).
-        [self.externalMenuItemMainMenu setTitle:(externalEnabled) ? EXTERNAL_MENU : EXTERNAL_MENU_OFF];
-        [self.externalMenuItemStatusBar setTitle:(externalEnabled) ? EXTERNAL_MENU : EXTERNAL_MENU_OFF];
+        [self.externalMenuItemMainMenu setTitle:(externalDisplaysHidden) ? EXTERNAL_MENU : EXTERNAL_MENU_OFF];
+        [self.externalMenuItemStatusBar setTitle:(externalDisplaysHidden) ? EXTERNAL_MENU : EXTERNAL_MENU_OFF];
+        [self.externalMenuItemMainMenu setEnabled:YES];
+        [self.externalMenuItemStatusBar setEnabled:YES];
     } else {
         [self.externalMenuItemMainMenu setTitle:EXTERNAL_MENU_NONE];
         [self.externalMenuItemStatusBar setTitle:EXTERNAL_MENU_NONE];
+        [self.externalMenuItemMainMenu setEnabled:NO];
+        [self.externalMenuItemStatusBar setEnabled:NO];
     }
 
     // Show or hide the shade layer's view appropriately.
-	[[[window contentView] animator] setHidden:!externalEnabled];
+	[[[window contentView] animator] setHidden:!externalDisplaysHidden];
 
-    if (!externalEnabled) {
+    if (!externalDisplaysHidden) {
         [self showPresentation:self];
     } else {
         [self hidePresentation:self];

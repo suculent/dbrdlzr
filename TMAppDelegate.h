@@ -21,7 +21,7 @@
 	NSMenuItem *stateMenuItemStatusBar;
     NSMenuItem *externalMenuItemStatusBar;
 	BOOL shouldHideClutter;
-    BOOL externalEnabled;
+    BOOL externalDisplaysHidden;
     float opacity;
 }
 
@@ -47,5 +47,7 @@
 - (void)updateExternalStatus;
 
 - (void)keyDown:(NSEvent *)event;
+
+-(IBAction)quitApp:(id)sender;
 
 @end

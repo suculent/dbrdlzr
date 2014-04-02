@@ -16,8 +16,8 @@
 #define STATE_MENU					NSLocalizedString(@"Show Desktop Icons", nil) // global status menu-item title when enabled
 #define STATE_MENU_OFF				NSLocalizedString(@"Hide Desktop Icons", nil) // global status menu-item title when disabled
 
-#define EXTERNAL_MENU					NSLocalizedString(@"Hide External Display", nil) // global status menu-item title when enabled
-#define EXTERNAL_MENU_OFF				NSLocalizedString(@"Show External Display", nil) // global status menu-item title when disabled
+#define EXTERNAL_MENU					NSLocalizedString(@"Present External Display", nil) // global status menu-item title when enabled
+#define EXTERNAL_MENU_OFF				NSLocalizedString(@"Dim External Display", nil) // global status menu-item title when disabled
 #define EXTERNAL_MENU_NONE				NSLocalizedString(@"No External Display", nil) // global status menu-item title when no display connected
 
 #define HELP_TEXT					NSLocalizedString(@"When Debordelizer is frontmost:\rPress Q to Quit.", nil)
@@ -79,6 +79,7 @@
             screensFrame = NSUnionRect(screensFrame, [thisScreen frame]);
         }
 	}
+    
 	window = [[MGTransparentWindow windowWithFrame:screensFrame] retain];
 	
 	// Configure window.
@@ -118,7 +119,7 @@
 	// Only show help text when activated _after_ we've launched and hidden ourselves.
 	showsHelpWhenActive = NO;
 	
-	// Put this app into the background (the shade won't hide due to how its window is set up above).
+	// Put this app into the background
 	[NSApp hide:self];
 	
 	// Put window on screen.
@@ -248,7 +249,7 @@
 
 -(void)showExternal
 {
-    externalDisplaysHidden = YES;
+    externalDisplaysHidden = NO;
 
     [self updateExternalStatus];
 }

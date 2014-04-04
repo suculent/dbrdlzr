@@ -2,7 +2,7 @@
 //  TMAppDelegate.m
 //  Debordelizer
 //
-//  Created by Matej Sychra on 02/11/2009.
+//  Created by Matej Sychra on 1/4/2013.
 //
 
 #import "TMAppDelegate.h"
@@ -33,6 +33,7 @@
 #define KEY_DOCKICON				@"DbrdlzrSavedDockIconKey" // name of the saved dock icon state setting.
 #define KEY_ENABLED					@"DbrdlzrSavedEnabledKey" // name of the saved primary state setting.
 #define KEY_EXTERNAL				@"DbrdlzrSavedExternalKey" // name of the saved secondary state setting.
+#define KEY_NOTIFICATIONS			@"DbrdlzrSavedNotificationsKey" // name of the saved notification center state setting.
 
 @implementation TMAppDelegate
 
@@ -45,7 +46,8 @@
 @synthesize stateMenuItemStatusBar;
 @synthesize externalMenuItemMainMenu;
 @synthesize externalMenuItemStatusBar;
-
+@synthesize notificationsMenuItemStatusBar;
+@synthesize notificationsMenuItemMainMenu;
 
 #pragma mark Setup and Tear-down
 
@@ -58,6 +60,7 @@
 								[NSNumber numberWithBool:YES], KEY_DOCKICON, 
 								[NSNumber numberWithBool:NO], KEY_ENABLED,
                                 [NSNumber numberWithBool:NO], KEY_EXTERNAL,
+                                [NSNumber numberWithBool:NO], KEY_NOTIFICATIONS,
 								nil]];
 	
 	// Set up Dock icon.
@@ -113,9 +116,13 @@
 	[self updateEnabledStatus];
 
     // Set appropriate initial external display disable state.
-    externalDisplaysHidden = [defaults boolForKey:KEY_EXTERNAL];
+    shouldHideExternalDisplays = [defaults boolForKey:KEY_EXTERNAL];
     [self updateExternalStatus];
-	
+
+    // Set appropriate initial external display disable state.
+    shouldDisableNotificationCenter = [defaults boolForKey:KEY_NOTIFICATIONS];
+    [self updateNotificationCenterStatus];
+
 	// Only show help text when activated _after_ we've launched and hidden ourselves.
 	showsHelpWhenActive = NO;
 	
@@ -242,14 +249,14 @@
 
 - (IBAction)toggleExternalStatus:(id)sender
 {
-	externalDisplaysHidden = !externalDisplaysHidden;
+	shouldHideExternalDisplays = !shouldHideExternalDisplays;
 
 	[self updateExternalStatus];
 }
 
 -(void)showExternal
 {
-    externalDisplaysHidden = NO;
+    shouldHideExternalDisplays = NO;
 
     [self updateExternalStatus];
 }
@@ -361,7 +368,7 @@
 - (IBAction)hidePresentation:(id)sender
 {
 	// i.e. make screen darker by making our mask less transparent.
-	if (externalDisplaysHidden) {
+	if (shouldHideExternalDisplays) {
 		self.opacity = opacity + OPACITY_UNIT;
 	} else {
 		NSBeep();
@@ -372,7 +379,7 @@
 - (IBAction)showPresentation:(id)sender
 {
 	// i.e. make screen lighter by making our mask more transparent.
-	if (!externalDisplaysHidden) {
+	if (!shouldHideExternalDisplays) {
 		self.opacity = opacity - OPACITY_UNIT;
 	} else {
 		NSBeep();
@@ -416,13 +423,14 @@
 {
     // Save state.
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
-	[defaults setBool:externalDisplaysHidden forKey:KEY_EXTERNAL];
+	[defaults setBool:shouldHideExternalDisplays forKey:KEY_EXTERNAL];
 	[defaults synchronize];
 
+    // Enable the menu item in case we have external displays
     if ([[NSScreen screens] count] > 1) {
         // Update both enable/disable menu-items (in the main menubar and in the NSStatusItem's menu).
-        [self.externalMenuItemMainMenu setTitle:(externalDisplaysHidden) ? EXTERNAL_MENU : EXTERNAL_MENU_OFF];
-        [self.externalMenuItemStatusBar setTitle:(externalDisplaysHidden) ? EXTERNAL_MENU : EXTERNAL_MENU_OFF];
+        [self.externalMenuItemMainMenu setTitle:(shouldHideExternalDisplays) ? EXTERNAL_MENU : EXTERNAL_MENU_OFF];
+        [self.externalMenuItemStatusBar setTitle:(shouldHideExternalDisplays) ? EXTERNAL_MENU : EXTERNAL_MENU_OFF];
         [self.externalMenuItemMainMenu setEnabled:YES];
         [self.externalMenuItemStatusBar setEnabled:YES];
     } else {
@@ -433,14 +441,65 @@
     }
 
     // Show or hide the shade layer's view appropriately.
-	[[[window contentView] animator] setHidden:!externalDisplaysHidden];
+	[[[window contentView] animator] setHidden:!shouldHideExternalDisplays];
 
-    if (!externalDisplaysHidden) {
+    if (!shouldHideExternalDisplays) {
         [self showPresentation:self];
     } else {
         [self hidePresentation:self];
     }
 }
+
+-(IBAction)toggleNotificationCenterStatus:(id)sender
+{
+    shouldDisableNotificationCenter = !shouldDisableNotificationCenter;
+
+    [self updateNotificationCenterStatus];
+}
+
+- (void)updateNotificationCenterStatus
+{
+    // Save state.
+	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+	[defaults setBool:shouldDisableNotificationCenter forKey:KEY_EXTERNAL];
+	[defaults synchronize];
+
+    [self toggleNotifications];
+}
+
+-(void)toggleNotifications
+{
+    if (shouldDisableNotificationCenter) {
+
+        // launchctl unload -w
+        // killall NotificationCenter
+        //
+
+        // disable notification center
+        [NSTask launchedTaskWithLaunchPath:@"/bin/launchctl" arguments:
+         [NSArray arrayWithObjects:@"unload", @"-w", @"/System/Library/LaunchAgents/com.apple.notificationcenterui.plist", nil]
+         ];
+
+
+        // kill notificationcenter
+        [NSTask launchedTaskWithLaunchPath:@"/usr/bin/killall" arguments:
+         [NSArray arrayWithObjects:@"NotificationCenter", nil]
+         ];
+
+    } else {
+
+        // re-enable notification center
+        [NSTask launchedTaskWithLaunchPath:@"/bin/launchctl" arguments:
+         [NSArray arrayWithObjects:@"load", @"-w", @"/System/Library/LaunchAgents/com.apple.notificationcenterui.plist", nil]
+         ];
+
+        // restart finder
+        [NSTask launchedTaskWithLaunchPath:@"/usr/bin/killall" arguments:
+         [NSArray arrayWithObjects:@"NotificationCenter", nil]
+         ];
+    }
+}
+
 
 #pragma mark Accessors
 

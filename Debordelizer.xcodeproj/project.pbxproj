@@ -278,7 +278,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/bash;
-			shellScript = "";
+			shellScript = "#!/bin/bash\n\nzip ${PROJECT_DIR}/Build/Products/Release/Debordelizer.zip ${PROJECT_DIR}/Build/Products/Release/Debordelizer.app\nruby ${PROJECT_DIR}/sign_update.rb ${PROJECT_DIR}/Build/Products/Release/Debordelizer.zip /Users/sychram/Desktop/Dropbox/Developer/_Sparkle_DSA_Keys/dsa_priv.pem";
 		};
 /* End PBXShellScriptBuildPhase section */
 

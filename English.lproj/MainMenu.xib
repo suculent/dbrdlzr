@@ -101,6 +101,12 @@
                                     <action selector="toggleExternalStatus:" target="-1" id="8d0-SX-oBY"/>
                                 </connections>
                             </menuItem>
+                            <menuItem title="Hide Notification Center" keyEquivalent="n" id="DH7-BM-KmM">
+                                <modifierMask key="keyEquivalentModifierMask" option="YES" command="YES"/>
+                                <connections>
+                                    <action selector="toggleNotificationCenterStatus:" target="494" id="Qjw-fY-kY2"/>
+                                </connections>
+                            </menuItem>
                         </items>
                     </menu>
                 </menuItem>
@@ -123,6 +129,8 @@
                 <outlet property="dockIconCheckbox" destination="564" id="569"/>
                 <outlet property="externalMenuItemMainMenu" destination="b9S-nA-ucf" id="ceC-tQ-rdY"/>
                 <outlet property="externalMenuItemStatusBar" destination="xL6-4D-7h8" id="geC-Qy-pC3"/>
+                <outlet property="notificationsMenuItemMainMenu" destination="DH7-BM-KmM" id="Sjm-Ww-hr8"/>
+                <outlet property="notificationsMenuItemStatusBar" destination="zaL-0N-wFP" id="XxF-Yr-H2M"/>
                 <outlet property="prefsWindow" destination="562" id="568"/>
                 <outlet property="stateMenuItemMainMenu" destination="599" id="602"/>
                 <outlet property="stateMenuItemStatusBar" destination="601" id="603"/>
@@ -132,17 +140,23 @@
         <customObject id="420" customClass="NSFontManager"/>
         <menu id="540">
             <items>
-                <menuItem title="Turn Debordelizer Off" id="601">
+                <menuItem title="Hide Desktop Icons" id="601">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>
                         <action selector="toggleEnabledStatus:" target="494" id="604"/>
                     </connections>
                 </menuItem>
                 <menuItem isSeparatorItem="YES" id="554"/>
-                <menuItem title="Turn External Display Off" id="xL6-4D-7h8">
+                <menuItem title="Hide External Screen" id="xL6-4D-7h8">
                     <modifierMask key="keyEquivalentModifierMask"/>
                     <connections>
                         <action selector="toggleExternalStatus:" target="-1" id="8Wn-Be-2hz"/>
+                    </connections>
+                </menuItem>
+                <menuItem title="Hide Notification Center" id="zaL-0N-wFP">
+                    <modifierMask key="keyEquivalentModifierMask"/>
+                    <connections>
+                        <action selector="toggleNotificationCenterStatus:" target="-1" id="atI-wM-MdM"/>
                     </connections>
                 </menuItem>
                 <menuItem isSeparatorItem="YES" id="lGH-Uy-3QB"/>

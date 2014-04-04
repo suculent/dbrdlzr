@@ -1,3 +1,7 @@
+1.5
+- new feature: Disabling Notifications Center
+- known side effect: unhiding a Twitter client
+
 1.4
 - improved menu text label for hiding external screen, fixed logic
 

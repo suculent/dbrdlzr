@@ -3,14 +3,17 @@ Simple and efficient
 
 When started, the application icon appears in menu bar.
 
-• Use 'Turn Debordelizer On' (Cmd-Opt-S) to hide icons and restart Finder
+• Use 'Show/Hide Desktop Icons' (Cmd-Opt-S) to hide icons (requires restarting Finder)
 
-• Use 'Turn External Display On' (Cmd-Opt-E) to dim secondary display(s) to 95% dark
+• Use 'Show/Hide External Display' (Cmd-Opt-E) to dim secondary display(s) to 95% dark
+
+• Use 'Show/Hide Notication Center' (Cmd-Opt-E) to enable/disable notification center
 
 
 Protects your data
 ==================
-Main idea behind this app is to hide your Desktop clutter and private data on presentation.
+Main idea behind this app is to hide your Desktop clutter and private data on presentation. On a feature request, it 
+hides any notifications by disabling the Notification Center temporarily.
 
 
 Ask for your feature

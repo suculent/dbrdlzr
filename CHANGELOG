@@ -1,5 +1,6 @@
 1.6
 - fixed pixel icon offset
+- fixed updates of Notification Center menu item (bug found by Vráťa Čermák)
 
 1.5
 - new feature: Disabling Notifications Center

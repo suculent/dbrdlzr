@@ -20,6 +20,9 @@
 #define EXTERNAL_MENU_OFF				NSLocalizedString(@"Dim External Display", nil) // global status menu-item title when disabled
 #define EXTERNAL_MENU_NONE				NSLocalizedString(@"No External Display", nil) // global status menu-item title when no display connected
 
+#define NOTIF_MENU					NSLocalizedString(@"Show Notification Center", nil) // global status menu-item title when enabled
+#define NOTIF_MENU_OFF				NSLocalizedString(@"Hide Notification Center", nil) // global status menu-item title when disabled
+
 #define HELP_TEXT					NSLocalizedString(@"When Debordelizer is frontmost:\rPress Q to Quit.", nil)
 #define HELP_TEXT_OFF				NSLocalizedString(@"Debordelizer is Off.\rPress S to turn Debordelizer on,\ror press Q to Quit.\n", nil)
 
@@ -337,6 +340,7 @@
 	[statusItem setImage:(shouldHideClutter) ? STATUS_MENU_ICON : STATUS_MENU_ICON_OFF];
 	[statusItem setAlternateImage:(shouldHideClutter) ? STATUS_MENU_ICON_ALT : STATUS_MENU_ICON_OFF_ALT];
 
+
     [self toggleStatus];
 }
 
@@ -463,6 +467,10 @@
 	NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
 	[defaults setBool:shouldDisableNotificationCenter forKey:KEY_EXTERNAL];
 	[defaults synchronize];
+
+    // Update menu
+    [notificationsMenuItemMainMenu setTitle:(shouldDisableNotificationCenter) ? NOTIF_MENU : NOTIF_MENU_OFF];
+    [notificationsMenuItemStatusBar setTitle:(shouldDisableNotificationCenter) ? NOTIF_MENU : NOTIF_MENU_OFF];
 
     [self toggleNotifications];
 }
